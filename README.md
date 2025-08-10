@@ -93,6 +93,14 @@ Resume Screening AI is a full-stack web application that leverages machine learn
 
 ---
 
+#Images
+##  <img width="1898" height="871" alt="Screenshot 2025-08-10 215239" src="https://github.com/user-attachments/assets/3931e605-f6ac-47ec-bddc-d4a6caba1f1c" />
+
+<img width="1899" height="868" alt="Screenshot 2025-08-10 215308" src="https://github.com/user-attachments/assets/de93f9e6-3fbd-440e-ac89-7250fd6ac29b" />
+
+<img width="1899" height="870" alt="Screenshot 2025-08-10 215336" src="https://github.com/user-attachments/assets/d12b0e52-697d-4d98-b733-6a3b9e0c899a" />
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites
