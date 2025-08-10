@@ -5,16 +5,76 @@ import os
 import re
 from werkzeug.utils import secure_filename
 
-# Import PDF and document processing libraries
+# Import PDF and document processing libraries with better error handling
+PDF_SUPPORT = False
+PDFPLUMBER_SUPPORT = False
+DOC_SUPPORT = False
+
+# Try importing PyPDF2
 try:
     import PyPDF2
-    from docx import Document
     PDF_SUPPORT = True
+    print("✅ PyPDF2 imported successfully")
+    print(f"   PyPDF2 version: {PyPDF2.__version__}")
+except ImportError as e:
+    print(f"❌ PyPDF2 import failed: {e}")
+    print("   Attempting to install PyPDF2...")
+    try:
+        import subprocess
+        import sys
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "PyPDF2==3.0.1"])
+        import PyPDF2
+        PDF_SUPPORT = True
+        print("✅ PyPDF2 installed and imported successfully")
+    except Exception as install_error:
+        print(f"❌ Failed to install PyPDF2: {install_error}")
+
+# Try importing pdfplumber
+try:
+    import pdfplumber
+    PDFPLUMBER_SUPPORT = True  
+    print("✅ pdfplumber imported successfully")
+    print(f"   pdfplumber version: {pdfplumber.__version__}")
+except ImportError as e:
+    print(f"❌ pdfplumber import failed: {e}")
+    print("   Attempting to install pdfplumber...")
+    try:
+        import subprocess
+        import sys
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pdfplumber==0.9.0"])
+        import pdfplumber
+        PDFPLUMBER_SUPPORT = True
+        print("✅ pdfplumber installed and imported successfully")
+    except Exception as install_error:
+        print(f"❌ Failed to install pdfplumber: {install_error}")
+
+# Try importing python-docx
+try:
+    from docx import Document
     DOC_SUPPORT = True
-except ImportError:
-    print("Warning: PDF/DOC support not available. Install PyPDF2 and python-docx for file support.")
-    PDF_SUPPORT = False
-    DOC_SUPPORT = False
+    print("✅ python-docx imported successfully")
+except ImportError as e:
+    print(f"❌ python-docx import failed: {e}")
+    print("   Attempting to install python-docx...")
+    try:
+        import subprocess
+        import sys
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "python-docx==0.8.11"])
+        from docx import Document
+        DOC_SUPPORT = True
+        print("✅ python-docx installed and imported successfully")
+    except Exception as install_error:
+        print(f"❌ Failed to install python-docx: {install_error}")
+
+# Check PDF support status
+if PDF_SUPPORT or PDFPLUMBER_SUPPORT:
+    print("✅ PDF processing libraries available")
+    if PDF_SUPPORT:
+        print("   - PyPDF2 ready")
+    if PDFPLUMBER_SUPPORT:
+        print("   - pdfplumber ready")
+else:
+    print("⚠️  WARNING: No PDF processing support available!")
 
 # Download NLTK data if not already present
 try:
@@ -57,20 +117,49 @@ def extract_text_from_file(file_path, file_extension):
     
     try:
         if file_extension.lower() == '.pdf':
-            if not PDF_SUPPORT:
-                raise Exception("PDF support not available. Please install PyPDF2.")
+            if not PDF_SUPPORT and not PDFPLUMBER_SUPPORT:
+                raise Exception("PDF support not available. Please install PyPDF2 or pdfplumber.")
             
-            # Use PyPDF2 to extract text from PDF
-            try:
-                with open(file_path, 'rb') as file:
-                    pdf_reader = PyPDF2.PdfReader(file)
-                    for page_num in range(len(pdf_reader.pages)):
-                        page = pdf_reader.pages[page_num]
-                        page_text = page.extract_text()
-                        if page_text:
-                            text += page_text + "\n"
-            except Exception as e:
-                raise Exception(f"Error reading PDF file: {str(e)}")
+            # Try PyPDF2 first, then pdfplumber as fallback
+            pdf_extracted = False
+            
+            if PDF_SUPPORT:
+                try:
+                    print("🔄 Attempting PDF extraction with PyPDF2...")
+                    with open(file_path, 'rb') as file:
+                        pdf_reader = PyPDF2.PdfReader(file)
+                        for page_num in range(len(pdf_reader.pages)):
+                            page = pdf_reader.pages[page_num]
+                            page_text = page.extract_text()
+                            if page_text.strip():  # Only add non-empty text
+                                text += page_text + "\n"
+                    
+                    if text.strip():  # If we got some text
+                        pdf_extracted = True
+                        print("✅ PyPDF2 extraction successful")
+                    else:
+                        print("⚠️  PyPDF2 extracted empty text, trying pdfplumber...")
+                        
+                except Exception as pypdf_error:
+                    print(f"⚠️  PyPDF2 failed: {pypdf_error}")
+            
+            # Try pdfplumber if PyPDF2 failed or wasn't available
+            if not pdf_extracted and PDFPLUMBER_SUPPORT:
+                try:
+                    print("🔄 Attempting PDF extraction with pdfplumber...")
+                    import pdfplumber
+                    with pdfplumber.open(file_path) as pdf:
+                        for page in pdf.pages:
+                            page_text = page.extract_text()
+                            if page_text:
+                                text += page_text + "\n"
+                    print("✅ pdfplumber extraction successful")
+                    pdf_extracted = True
+                except Exception as plumber_error:
+                    print(f"⚠️  pdfplumber failed: {plumber_error}")
+            
+            if not pdf_extracted:
+                raise Exception("Failed to extract text from PDF with both PyPDF2 and pdfplumber")
                         
         elif file_extension.lower() in ['.docx', '.doc']:
             if not DOC_SUPPORT:
