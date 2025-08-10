@@ -3,13 +3,14 @@ services:
     name: resume-screening-ai
     env: python
     plan: free
+    runtime: python
     buildCommand: |
-      echo "🔧 Installing dependencies..."
+      echo "🔧 Installing dependencies with Python 3.11..."
+      pip install --upgrade pip
       pip install -r requirements.txt
-      echo "📥 Force installing PDF libraries..."
-      pip install PyPDF2==3.0.1 --force-reinstall
-      pip install pdfplumber==0.9.0 --force-reinstall
-      pip install python-docx==0.8.11 --force-reinstall
+      echo "📥 Verifying PDF processing libraries..."
+      python -c "import PyPDF2; print('✅ PyPDF2 ready')"
+      python -c "import pdfplumber; print('✅ pdfplumber ready')"
       echo "✅ Build completed successfully!"
     startCommand: "gunicorn --bind 0.0.0.0:$PORT wsgi:app"
     envVars:
@@ -19,4 +20,6 @@ services:
         value: /opt/render/project/src
       - key: MAX_CONTENT_LENGTH
         value: "16777216"
+      - key: PYTHON_VERSION
+        value: "3.11.9"
     autoDeploy: true
