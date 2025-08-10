@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Resume Screening</title>
+</head>
+<body>
+    <h1>Test Resume Screening</h1>
+    
+    <h2>Test Text Input</h2>
+    <form id="textForm">
+        <textarea id="resumeText" rows="10" cols="50" placeholder="Paste resume text here...">
+John Doe
+Software Developer
+Experience with Python, Machine Learning, Data Science
+Skills: pandas, scikit-learn, Flask
+        </textarea><br><br>
+        <button type="submit">Test Text Prediction</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('textForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const textInput = document.getElementById('resumeText');
+            
+            formData.append('resume_text', textInput.value.trim());
+            
+            try {
+                console.log('Sending request...');
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('Result:', result);
+                
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
