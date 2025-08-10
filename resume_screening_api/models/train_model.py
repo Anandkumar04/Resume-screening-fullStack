@@ -1,7 +1,7 @@
-import pandas as pd
 import numpy as np
 import pickle
 import re
+import csv
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.multiclass import OneVsRestClassifier
@@ -54,17 +54,27 @@ def train_and_save_model():
         print(f"Dataset not found at {dataset_path}")
         return 0.0
         
-    df = pd.read_csv(dataset_path, encoding='utf-8')
-    print(f"Loaded {len(df)} resume records")
+    # Read CSV without pandas
+    resumes = []
+    categories = []
+    
+    with open(dataset_path, 'r', encoding='utf-8') as file:
+        csv_reader = csv.DictReader(file)
+        for row in csv_reader:
+            if 'Resume' in row and 'Category' in row:
+                resumes.append(row['Resume'])
+                categories.append(row['Category'])
+    
+    print(f"Loaded {len(resumes)} resume records")
     
     print("Cleaning resume texts...")
     # Clean resume texts
-    df['cleaned_resume'] = df['Resume'].apply(clean_resume)
+    cleaned_resumes = [clean_resume(resume) for resume in resumes]
     
     print("Preparing features and labels...")
     # Prepare features and labels
-    X = df['cleaned_resume'].values
-    y = df['Category'].values
+    X = cleaned_resumes
+    y = categories
     
     # Encode labels
     label_encoder = LabelEncoder()

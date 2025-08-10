@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-import pandas as pd
 import pickle
 import os
 import re
@@ -384,10 +383,15 @@ def predict():
 def get_categories():
     """Get all available categories"""
     try:
-        # Read the dataset to get categories
-        df = pd.read_csv('../resume_dataset.csv')
-        categories = df['Category'].unique().tolist()
-        return jsonify({'categories': categories})
+        # Read the dataset to get categories using CSV module
+        import csv
+        categories = set()
+        with open('../resume_dataset.csv', 'r', encoding='utf-8') as file:
+            csv_reader = csv.DictReader(file)
+            for row in csv_reader:
+                if 'Category' in row:
+                    categories.add(row['Category'])
+        return jsonify({'categories': list(categories)})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
