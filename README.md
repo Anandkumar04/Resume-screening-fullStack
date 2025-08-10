@@ -1,115 +1,153 @@
-# Resume Screening
+# AI Resume Screening System 
 
-This repository contains a machine learning project focused on automating the resume screening process using Python. The primary goal is to develop a model that can efficiently and accurately evaluate resumes based on predefined criteria.
+## 🎯 Project Overview
 
-<img src="Cover.png" alt="resume cover">
+Resume Screening AI is a full-stack web application that leverages machine learning to automatically classify resumes into job categories. It processes multiple file formats (PDF, DOC, TXT) and provides real-time classification with confidence scores, helping organizations streamline their hiring workflow.
 
-## Table of Contents
+---
 
-- [Why do we need Resume Screening?](#why-do-we-need-resume-screening)
-- [Introduction](#introduction)
-- [Modules & Libraries](#modules--libraries)
-- [Functionality of Application](#functionality-of-application)
-- [Tools & Technologies Used](#tools--technologies-used)
-- [Tech Innovations in Resume Screening](#tech-innovations-in-resume-screening)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Dataset](#dataset)
-- [Model](#model)
-- [Results](#results)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+## 💡 Technical Architecture
 
-## Why do we need Resume Screening?
+### Backend (Python/Flask)
+- **Framework:** Flask web application with RESTful API
+- **ML Pipeline:** scikit-learn (K-Nearest Neighbors classifier)
+- **Text Processing:** TF-IDF vectorization for feature extraction
+- **File Handling:** PyPDF2 and pdfplumber for robust PDF text extraction
+- **Data Processing:** NLTK for text cleaning and preprocessing
 
-- For each recruitment, companies take out the resume, referrals and go through them manually.
-- Companies often received thousands of resumes for every job posting.
-- When companies collect resumes then they categorize those resumes according to their requirements and then they send the collected resumes to the Hiring Teams.
-- It becomes very difficult for the hiring teams to read the resume and select the resume according to the requirement, there is no problem if there are one or two resumes but it is very difficult in case of hundreds of resumes.
-- To solve this problem, we will screen the resume using machine learning and NLP using Python so that we can complete days of work in few minutes.
+### Frontend
+- **UI:** Responsive design powered by Bootstrap 5
+- **JavaScript:** Asynchronous form submission via Fetch API
+- **UX:** Real-time feedback, loading states, and error handling for seamless user experience
 
-## Introduction
+### Data Flow
+1. **User uploads resume** (PDF/DOC/TXT) or pastes text
+2. **Backend extracts and cleans text content**
+3. **ML model processes text** using trained TF-IDF vectors
+4. **Returns predicted job category with confidence score**
 
-- Resume screening is the process of determining whether a candidate is qualified for a role based on their education, experience, and other information captured on their resume.
-- It’s a form of pattern matching between a job’s requirements and the qualifications of a candidate based on their resume.
-- The goal of screening resumes is to decide whether to move a candidate forward – usually onto an interview – or to reject them.
+---
 
-## Modules & Libraries
+## 🔧 Technical Challenges & Solutions
 
-### Modules
-- **KNN**: It's a supervised technique used for classification. "K" in KNN represents the number of nearest neighbors used to classify or predict in case of continuous variables.
-- **NLP**: Natural Language Processing (NLP) is a field in machine learning with the ability of a computer to understand, analyze, manipulate, and potentially generate human language.
+**1. PDF Text Extraction**
+- **Challenge:** PDFs could not be read as plain text
+- **Solution:** Dual PDF processing (PyPDF2 + pdfplumber fallback)
+- **Lesson:** Robust file format handling and error management
 
-### Libraries
-- **NumPy**: Fundamental package for Python providing support for large multidimensional arrays and matrices.
-- **Pandas**: Open-source library providing easy data structures and quicker data analysis for Python.
-- **Matplotlib**: Open-source library widely used for creating publication-quality figures in a variety of formats.
-- **Seaborn**: Library derived from Matplotlib used for visualizing statistical models like heat maps.
-- **SciPy**: Open-source software used for scientific computing in Python.
-- **Scikit-learn**: Free software machine learning library for Python used for classification, regression, clustering, and more.
-- **NLTK**: Natural Language Toolkit (NLTK) is a set of processing libraries providing solutions for text analysis and language processing.
+**2. Python 3.13 Compatibility**
+- **Challenge:** Package compatibility issues
+- **Solution:** Flexible version constraints in `requirements.txt`
+- **Lesson:** Dependency management is key for maintainability
 
-## Functionality of Application
+**3. Frontend-Backend Integration**
+- **Challenge:** Form submission not triggering
+- **Solution:** Implemented event listeners with DOMContentLoaded
+- **Lesson:** Console log debugging essential for JavaScript
 
-Screening resumes usually involves a three-step process based on the role’s minimum and preferred qualifications. Both types of qualifications should be related to on-the-job performance. These qualifications can include:
-- Work experience
-- Education
-- Skills and knowledge
-- Personality traits
-- Competencies
+---
 
-## Tools & Technologies Used
+## 📊 Machine Learning Implementation
 
-- Machine Learning and Artificial intelligence, along with text mining and natural language processing algorithms, can be applied for the development of programs (i.e. Applicant Tracking Systems) to automate the resume screening process.
+- **Data Preprocessing:** Text cleaning, tokenization
+- **Model Training:**
+  - **Algorithm:** K-Nearest Neighbors (KNN)
+  - **Features:** TF-IDF vectors (bag-of-words)
+  - **Training Data:** Resume dataset with job category labels
+  - **Evaluation:** Cross-validation for model performance
 
-## Tech Innovations in Resume Screening
+**Why KNN + TF-IDF?**
+- Simple, interpretable, effective for text classification
+- TF-IDF highlights important words, reduces noise
+- Easy scalability with new data
 
-- Designed to meet the needs of recruiters that current technology can’t solve, a new class of recruiting technology called AI for recruitment has arrived.
-- AI for recruiting is an emerging category of HR technology designed to reduce — or even remove — time-consuming, administrative activities like manually screening resumes.
-- The best AI software is designed to integrate seamlessly with your current recruiting stack so it doesn’t disrupt your workflow nor the candidate workflow.
-- Industry experts predict this type of automation technology will transform the recruiting function.
+---
 
-## Installation
+## 🎨 Full-Stack Skills Demonstrated
 
-To get started with the project, clone the repository and install the required dependencies.
+| Frontend           | Backend        | ML/Data         | DevOps           |
+|--------------------|---------------|-----------------|------------------|
+| HTML5/CSS3         | Python/Flask  | scikit-learn    | Git              |
+| JavaScript (ES6+)  | RESTful APIs  | NLTK            | Debug/Testing    |
+| Bootstrap 5        | File handling | Data preprocessing | Environment setup |
+| Responsive design  | Error handling| Model evaluation| Dependency management |
+
+---
+
+## 🚀 Key Accomplishments
+
+- **End-to-End Development:** Complete ML pipeline and web integration
+- **Multi-Format Support:** PDF, DOC, DOCX, and text files
+- **Real-time Processing:** Instant classification and feedback
+- **Production-Ready:** Robust error handling, validation, and UX
+- **Scalable Architecture:** Easily extendable to new categories or higher accuracy
+
+---
+
+## 💼 Business Impact
+
+- **Time Saving:** Automates manual resume screening
+- **Consistency:** Removes human bias from initial screening
+- **Scalability:** Processes hundreds of resumes quickly
+- **Cost Effective:** Reduces HR workload for large-scale hiring
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.10+ (recommended)
+- Node.js (for frontend development, optional)
+- [pip](https://pip.pypa.io/en/stable/) for Python dependencies
+
+### Installation
 
 ```bash
-git clone https://github.com/anukalp-mishra/Resume-Screening.git
-cd Resume-Screening
+git clone https://github.com/Anandkumar04/resume-screening-ai.git
+cd resume-screening-ai
 pip install -r requirements.txt
 ```
-## Usage
-Follow these steps to use the project:
 
-Prepare your dataset of resumes.
-Preprocess the data using the provided scripts.
-Train the machine learning model.
-Use the trained model to screen new resumes.
-Detailed instructions for each step can be found in the Jupyter notebooks provided in the repository.
+### Running the Application
 
-Dataset
-The dataset used for this project consists of resumes collected from various sources. The data is preprocessed to extract relevant features such as skills, experience, and education.
+```bash
+python app.py
+```
 
-Model
-The project uses various machine learning models to evaluate resumes. These models are trained on labeled data to classify resumes based on predefined criteria. The models include:
+Visit [http://localhost:5000](http://localhost:5000) in your browser.
 
-Logistic Regression
-Support Vector Machines
-Random Forest
-Neural Networks
-Results
-The performance of the models is evaluated using metrics such as accuracy, precision, recall, and F1-score. The results are documented and visualized in the Jupyter notebooks.
+---
 
-Contributing
-Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
+## 📝 File Formats Supported
 
-License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+- PDF, DOC, DOCX, TXT
 
-Contact
-For any questions or inquiries, please contact:
+## 📈 Output
 
-Anukalp Mishra
+- Predicted job category
+- Confidence score for classification
 
-GitHub: anukalp-mishra
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open issues or pull requests for improvements, new features, or bug fixes.
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## 👀 Demo
+
+![Demo Screenshot](demo/demo_screenshot.png)
+
+---
+
+## 📬 Contact
+
+For questions or feedback, open an issue or reach out to [Anandkumar04](https://github.com/Anandkumar04).
